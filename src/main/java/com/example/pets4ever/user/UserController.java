@@ -7,10 +7,7 @@ import com.example.pets4ever.utils.MyCookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -28,9 +25,9 @@ public class UserController {
     GetIdFromToken getIdFromToken;
 
     @GetMapping("")
-    public ResponseEntity<UserResponse> user(HttpServletRequest request) {
+    public ResponseEntity<UserResponse> user(@RequestHeader("Authorization") String jwt) {
 
-        String id = getIdFromToken.id(request);
+        String id = getIdFromToken.id(jwt);
 
         UserResponse user = userService.userById(id);
         return ResponseEntity.status(HttpStatus.OK).body(user);

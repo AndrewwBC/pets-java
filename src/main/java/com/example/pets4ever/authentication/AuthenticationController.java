@@ -18,6 +18,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -44,18 +47,9 @@ public class AuthenticationController {
         var auth = this.authenticationManager.authenticate(usernamePassword);
         String jwt = tokenService.generateToken((User) auth.getPrincipal());
 
-        MyCookie myCookie = new MyCookie();
+        Map<String, String> response = new HashMap<>();
+        response.put("jwt", jwt);
 
-        ResponseCookie jwtCookie = myCookie.
-                generateCookie("jwt", jwt, 24, true, true);
-        ResponseCookie hasSession = myCookie.
-                generateCookie("hasSession", "yes", 24, false, false);
-
-        HttpHeaders headers = new HttpHeaders();
-
-        headers.add(HttpHeaders.SET_COOKIE, jwtCookie.toString());
-        headers.add(HttpHeaders.SET_COOKIE, hasSession.toString());
-
-        return ResponseEntity.ok().headers(headers).body("Logado com sucesso.");
+        return ResponseEntity.ok(response);
     }
 }

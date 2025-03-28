@@ -12,20 +12,9 @@ public class GetIdFromToken {
 
     @Autowired
     TokenService tokenService;
-    public String id(HttpServletRequest request) {
-
-        String jwt = null;
-
-        // Pegando o cookie JWT
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("jwt")) {
-                    jwt = cookie.getValue();
-                }
-            }
-        }
-
+    public String id(String token) {
+        String jwt = token.replace("Bearer ", "");
+        System.out.println(jwt);
         return tokenService.validateTokenAndGetUserId(jwt);
     }
 }

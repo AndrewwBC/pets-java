@@ -81,18 +81,6 @@ public class AmazonClient {
         }
     }
 
-    public String uploadVideo(MultipartFile video) throws IOException {
-        File file = convertMultiPartToFile(video);
-        String originalFilename = video.getOriginalFilename();
-        System.out.println(originalFilename);
-
-        assert originalFilename != null;
-        String uniqueFilename = generateUniqueFilename(originalFilename);
-
-        uploadFileTos3bucket(uniqueFilename, file);
-        return uniqueFilename;
-    }
-
     public String deleteFileFromS3Bucket(String fileName) {
         System.out.println(this.bucketName + "/" + fileName);
         this.s3client.deleteObject(new DeleteObjectRequest(this.bucketName, fileName));
